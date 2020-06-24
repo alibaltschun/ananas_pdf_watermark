@@ -1,15 +1,14 @@
 from reportlab.pdfgen import canvas
 from PyPDF2 import PdfFileWriter, PdfFileReader
-from flask import send_file, current_app as app
+from flask import Flask, request, send_file, current_app as app
 
-from flask import Flask, request
 app = Flask(__name__)
 
-input_file = PdfFileReader(open('./pdf_target.pdf', "rb"))
 
 @app.route('/pdf')
 def show_static_pdf():
-    
+    input_file = PdfFileReader(open('./pdf_target.pdf', "rb"))
+
     text = request.args.get('text', 'empty')
     
     c = canvas.Canvas('watermark.pdf')
@@ -36,7 +35,6 @@ def show_static_pdf():
     
     file = open(output_pdf, "rb")
     return send_file(file, attachment_filename='I Hate Diet - Online PDF Program - V2.pdf',as_attachment=True, mimetype='application/pdf')
-
 
 
 app.run(host='localhost', port=5000)
